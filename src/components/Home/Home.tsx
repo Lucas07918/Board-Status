@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import "./styles.css"
 
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../../config/firestore";
 
 interface Board {
@@ -18,13 +18,15 @@ type Button = 'A'|'B'|'C'|'D';
 export function Home(){
 
     // const [buttonPressed, setButtonPressed] = useState<Button | null>(null);
-    const [boardNumber, setBoardNumber] = useState(0);
+    const [boardNumber, setBoardNumber] = useState(1);
     const [mode, setMode] = useState<Mode>(null);
     // const [available, setAvailable] = useState(true);
     const [tela, setTela] = useState('Aperte A ou B');
     const [h3, setH3] = useState('');
     const [awaitingNFC, setAwaitingNFC] = useState(false)
     const [boards, setBoards] = useState<Board[]>([])
+    const [boardAv, setBoardAv] = useState('')
+    const [maxBoards, setMaxBoards] = useState(0)
 
     async function getBoards() {
         try {
@@ -41,21 +43,24 @@ export function Home(){
     }
     
     useEffect(() => {
+        const fecthBoardCount = async() => {
+            const querySnapshot = await getDocs(collection(db, "boards"));
+            setMaxBoards(querySnapshot.size)
+        };
+
+        fecthBoardCount();
         getBoards();
     }, []);
-
-    
-    
-    useEffect(() => {
-        getBoards();
-        // getTeste()
-    }, []);
     
 
-    const handleNfcPressed = () => {
+    const handleNfcPressed = async() => {
         setTela('')
         if (awaitingNFC) {
             if (mode === 'pegar') {
+                const boardDocref = doc(db, 'boards', `board${boardNumber}`);
+                await updateDoc(boardDocref, {
+                    boardAvailability: boardAv
+                })
                 setH3(`Utilizando lousa n°${boardNumber}`)
                 setTimeout(() => {
                     setH3('')
@@ -63,6 +68,10 @@ export function Home(){
                 }, 1000);
                 reset()
             } else if (mode === 'devolver') {
+                const boardDocref = doc(db, 'boards', `board${boardNumber}`);
+                await updateDoc(boardDocref, {
+                    boardAvailability: boardAv
+                })
                 setH3(`Devolvendo lousa n°${boardNumber}`)
                 setTimeout(() => {
                     setH3('')
@@ -90,9 +99,9 @@ export function Home(){
             }
         } else {
             if (button === 'A') {
-                setBoardNumber(prevNumber => prevNumber + 1);
+                setBoardNumber(prevNumber => Math.min(prevNumber + 1, maxBoards));
             } else if (button === 'B') {
-                setBoardNumber(prevNumber => prevNumber - 1);
+                setBoardNumber(prevNumber => Math.max(prevNumber - 1, 1));
             } else if (button === 'C') {
                 setAwaitingNFC(true)
                 if(mode === 'pegar'){
@@ -120,7 +129,7 @@ export function Home(){
 
     const reset = () => {
         setMode(null);
-        setBoardNumber(0);
+        setBoardNumber(1);
         setAwaitingNFC(false)
     }
 
@@ -131,6 +140,7 @@ export function Home(){
         if (boardDoc.exists()) {
             const data = boardDoc.data();
             if (data.boardAvailability === 'disponivel') {
+                setBoardAv('indisponivel');
                 setAwaitingNFC(true);
             } else {
                 setTela('Lousa indisponível')
@@ -149,9 +159,8 @@ export function Home(){
         if (boardDoc.exists()) {
             const data = boardDoc.data();
             if (data.boardAvailability === 'indisponivel') {
-                console.log(data.boardAvailability)
+                setBoardAv('disponivel');
                 setAwaitingNFC(true);
-                console.log('true ou false: ', awaitingNFC)
             } else {
                 setTela('Esta lousa não estava sendo usada')
                 setTimeout(() => {
