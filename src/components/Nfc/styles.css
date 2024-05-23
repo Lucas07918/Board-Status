@@ -1,0 +1,29 @@
+#adesivoNFC-box{
+    height: 93vh;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.adesivoNFC{
+    background-color: #EADBC8;
+    height: 130px;
+    width: 130px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0,0,0,0.22);
+    transition: .4s;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+}
+
+.adesivoNFC:hover{
+    cursor: pointer;
+}
+
+.adesivoNFC:active{
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}

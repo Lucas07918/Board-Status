@@ -1,0 +1,117 @@
+#content{
+    padding: 30px;
+    width: 30%;
+    height: 93vh;
+    background-color: #EADBC8;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 20px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0,0,0,0.22);
+    transition: .4s;
+}
+
+#screen-box{
+    background-color: #627254;
+    padding: 15px;
+    border-radius: 20px;
+    height: 30%;
+}
+
+#screen{
+    background-color: #9EB23B;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+#buttons{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+#upside-buttons{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+}
+
+.upside-button{
+    background-color: #E72929;
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 3px #222831d5 solid;
+    box-shadow: 8px 8px 28px rgba(0, 0, 0, 0.25), 8px 10px 10px rgba(0,0,0,0.22);
+    transition: .4s;
+}
+
+.upside-button:hover{
+    background-color: #ca2424;
+    cursor: pointer;
+}
+
+.upside-button:active{
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    border: 2px #222831d5 solid;
+}
+
+.buttonB-box{
+    margin-left: auto;
+}
+.buttonA-box{
+    margin-right: auto;
+}
+
+#downside-buttons{
+    width: 150px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.downside-button{
+    height: 25px;
+    width: 70px;
+    background-color: #627254;
+    border-radius: 15px;
+    border: 3px #222831 solid;
+    box-shadow: 8px 8px 28px rgba(0, 0, 0, 0.25), 8px 10px 10px rgba(0,0,0,0.22);
+    transition: .4s;
+}
+
+.downside-button:hover{
+    background-color: #4b5740;
+    cursor: pointer;
+}
+
+.downside-button:active{
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    border: 2px #222831d5 solid;
+    /* transition: border .4s; */
+}
+
+.buttonC-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.buttonD-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

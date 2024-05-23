@@ -1,0 +1,19 @@
+#avaiabilityList{
+    /* height: 93vh; */
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    background-color: #31363F;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+ul{
+    list-style: none;
+    color: white;
+    margin-top: 10px;
+}
