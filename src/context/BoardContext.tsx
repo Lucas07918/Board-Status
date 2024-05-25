@@ -31,6 +31,7 @@ interface BoardContextProps{
     handleButtonPress: (button: string) => void;
 }
 
+// Cria o contexto para compartilhar o estado entre componentes
 const BoardContext = createContext<BoardContextProps | undefined>(undefined);
 
 export const BoardProvider = ({ children }: {children: ReactNode }) => {
@@ -43,6 +44,7 @@ export const BoardProvider = ({ children }: {children: ReactNode }) => {
     const [boardAv, setBoardAv] = useState('')
     const [maxBoards, setMaxBoards] = useState(0)
 
+    // Função para buscar todas as lousas do Firestore
     async function getBoards() {
         try {
             console.log("Fetching boards...");
@@ -51,6 +53,7 @@ export const BoardProvider = ({ children }: {children: ReactNode }) => {
                 id: doc.id,
                 ...doc.data()
               })) as Board[];
+              console.log("Boards fetched:", data);
               setBoards(data)
               setMaxBoards(data.length)
         } catch (error) {
@@ -58,11 +61,13 @@ export const BoardProvider = ({ children }: {children: ReactNode }) => {
         }
     }
     
+    // Busca as lousas ao montar o componente
     useEffect(() => {
         getBoards();
-    }, [boards]);
+    }, []);
     
 
+    // Função para tratar o evento de clicar no botão NFC
     const handleNfcPressed = async() => {
         setTela('')
         if (awaitingNFC) {
@@ -70,7 +75,8 @@ export const BoardProvider = ({ children }: {children: ReactNode }) => {
                 const boardDocref = doc(db, 'boards', `board${boardNumber}`);
                 await updateDoc(boardDocref, {
                     boardAvailability: boardAv
-                })
+                });
+                console.log(`${mode === 'pegar' ? 'utilizando' : 'devolvendo'} lousa número ${boardNumber}`)
                 setH3(`Utilizando lousa n°${boardNumber}`)
                 setTimeout(() => {
                     setH3('')
@@ -92,6 +98,7 @@ export const BoardProvider = ({ children }: {children: ReactNode }) => {
         }
     }
 
+    // Função para tratar o pressionar dos botões A, B, C, D
     const handleButtonPress = (button: string) => {
         if (mode === null) {
             if (button === 'A') {
@@ -99,12 +106,14 @@ export const BoardProvider = ({ children }: {children: ReactNode }) => {
                 setTimeout(() => {
                     setTela('')
                     setMode('pegar');
+                    console.log('Modo setado para pegar lousa')
                 }, 1000)
             } else if (button === 'B') {
                 setTela('Devolver lousa')
                 setTimeout(() => {
                     setTela('')
                     setMode('devolver');
+                    console.log('Modo setado para devolver lousa')
                 }, 1000)
             }
         } else {
@@ -114,6 +123,7 @@ export const BoardProvider = ({ children }: {children: ReactNode }) => {
                 setBoardNumber(prevNumber => Math.max(prevNumber - 1, 1));
             } else if (button === 'C') {
                 setAwaitingNFC(true)
+                console.log('Esperando NFC...')
                 if(mode === 'pegar'){
                     checkBoardAvailability(boardNumber)
                         setTimeout(() => {
@@ -128,6 +138,7 @@ export const BoardProvider = ({ children }: {children: ReactNode }) => {
                 }
             } else if (button === 'D') {
                 setTela('Cancelando')
+                console.log('Operação cancelada')
                     setTimeout(() => {
                         setTela('Aperte A ou B')
                     }, 1000);
@@ -136,14 +147,17 @@ export const BoardProvider = ({ children }: {children: ReactNode }) => {
         }
     };
     
-
+    // Função para resetar a operação/estados
     const reset = () => {
         setMode(null);
         setBoardNumber(1);
         setAwaitingNFC(false)
+        console.log('Operação resetada')
     }
 
+    // Função para verificar a disponibilidade da lousa
     const checkBoardAvailability = async (number: number) => {
+        console.log(`Verificando disponibilidade da lousa ${number}`);
         const boardDocRef = doc(db, "boards", `board${number}`);
         const boardDoc = await getDoc(boardDocRef);
 
@@ -152,17 +166,21 @@ export const BoardProvider = ({ children }: {children: ReactNode }) => {
             if (data?.boardAvailability === 'disponível') {
                 setBoardAv('indisponível');
                 setAwaitingNFC(true);
+                console.log('Lousa disponível, aguardando NFC');
             } else {
                 setTela('Lousa indisponível')
                 setTimeout(() => {
                     setTela('Aperte A ou B')
                 }, 1000)
-                reset()
+                reset();
+                console.log('Lousa indisponível')
             }
         }
     }
 
+    // Função para tratar a devolução da lousa
     const handleReturnBoard = async (number: number) => {
+        console.log(`Devolvendo lousa ${number}`);
         const boardDocRef = doc(db, "boards", `board${number}`);
         const boardDoc = await getDoc(boardDocRef);
 
@@ -171,12 +189,14 @@ export const BoardProvider = ({ children }: {children: ReactNode }) => {
             if (data?.boardAvailability === 'indisponível') {
                 setBoardAv('disponível');
                 setAwaitingNFC(true);
+                console.log('Lousa devolvida, aguardando NFC')
             } else {
                 setTela('Esta lousa não estava sendo usada')
                 setTimeout(() => {
                     setTela('Aperte A ou B')
                 }, 1000)
-                reset()
+                reset();
+                console.log('Lousa não estava sendo usada');
             }
         }
     }

@@ -6,6 +6,7 @@ import Device from '../Device/Device';
 import AvailabilityList from '../AvailabilityList/AvailabilityList';
 
 
+// Componente principal que usa os componentes acima e fornece o contexto
 export function Home(){
 
     return(

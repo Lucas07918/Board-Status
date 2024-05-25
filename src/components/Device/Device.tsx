@@ -2,6 +2,7 @@ import React from "react"
 import { useBoardContext } from "../../context/BoardContext"
 import './styles.css';
 
+// Componente que representa o dispositivo IOT
 const Device: React.FC = () => {
 
     const { mode, tela, h3, awaitingNFC, boardNumber, handleButtonPress } = useBoardContext();
