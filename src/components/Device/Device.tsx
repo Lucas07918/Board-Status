@@ -51,7 +51,7 @@ const Device: React.FC = () => {
                                 )}
                             </div>
                         </div>
-                        <h2>Nintendo GAME BOY</h2>
+                        <h2>Rocket BOARD STATUS</h2>
                         <div id="buttons">
                             <div id="upside-buttons">
                                 <div className="buttonB-box">

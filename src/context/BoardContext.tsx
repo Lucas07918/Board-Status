@@ -149,7 +149,7 @@ export const BoardProvider = ({ children }: {children: ReactNode }) => {
 
         if (boardDoc.exists()) {
             const data = boardDoc.data();
-            if (data?.boardAvailability === 'disponivel') {
+            if (data?.boardAvailability === 'disponível') {
                 setBoardAv('indisponível');
                 setAwaitingNFC(true);
             } else {
